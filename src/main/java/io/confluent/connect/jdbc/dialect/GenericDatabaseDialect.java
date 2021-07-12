@@ -15,6 +15,7 @@
 
 package io.confluent.connect.jdbc.dialect;
 
+import java.text.SimpleDateFormat;
 import java.time.ZoneOffset;
 import java.util.TimeZone;
 import org.apache.kafka.common.config.AbstractConfig;
@@ -28,6 +29,13 @@ import org.apache.kafka.connect.data.Time;
 import org.apache.kafka.connect.errors.ConnectException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+//import io.debezium.time.Date;
+import io.debezium.time.MicroTime;
+import io.debezium.time.MicroTimestamp;
+//import io.debezium.time.Time;
+//import io.debezium.time.Timestamp;
+import io.debezium.time.ZonedTimestamp;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -1703,6 +1711,15 @@ public class GenericDatabaseDialect implements DatabaseDialect {
               DateTimeUtils.getTimeZoneCalendar(timeZone)
           );
           return true;
+        case MicroTimestamp.SCHEMA_NAME:
+          Long mts = (Long) value;
+          Long milliTimestamp = mts / 1000;
+          statement.setTimestamp(
+                  index,
+                  new java.sql.Timestamp(milliTimestamp),
+                  DateTimeUtils.getTimeZoneCalendar(timeZone)
+          );
+          return true;
         default:
           return false;
       }
@@ -1856,6 +1873,11 @@ public class GenericDatabaseDialect implements DatabaseDialect {
         case org.apache.kafka.connect.data.Timestamp.LOGICAL_NAME:
           builder.appendStringQuoted(
               DateTimeUtils.formatTimestamp((java.util.Date) value, timeZone)
+          );
+          return;
+        case MicroTimestamp.SCHEMA_NAME:
+          builder.appendStringQuoted(
+                  DateTimeUtils.formatTimestamp((java.util.Date) value, timeZone)
           );
           return;
         default:
