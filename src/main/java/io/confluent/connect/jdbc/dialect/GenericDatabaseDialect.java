@@ -32,11 +32,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 //import io.debezium.time.Date;
-import io.debezium.time.MicroTime;
+//import io.debezium.time.MicroTime;
 import io.debezium.time.MicroTimestamp;
 //import io.debezium.time.Time;
 //import io.debezium.time.Timestamp;
-import io.debezium.time.ZonedTimestamp;
+//import io.debezium.time.ZonedTimestamp;
 
 import java.io.IOException;
 import java.math.BigDecimal;
