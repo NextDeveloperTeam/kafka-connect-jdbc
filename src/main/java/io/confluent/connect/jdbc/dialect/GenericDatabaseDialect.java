@@ -1875,11 +1875,6 @@ public class GenericDatabaseDialect implements DatabaseDialect {
               DateTimeUtils.formatTimestamp((java.util.Date) value, timeZone)
           );
           return;
-        case MicroTimestamp.SCHEMA_NAME:
-          builder.appendStringQuoted(
-                  DateTimeUtils.formatTimestamp((java.util.Date) value, timeZone)
-          );
-          return;
         default:
           // fall through to regular types
           break;
