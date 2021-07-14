@@ -18,6 +18,8 @@ package io.confluent.connect.jdbc.dialect;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+
+import io.debezium.time.MicroTimestamp;
 import org.apache.kafka.common.config.AbstractConfig;
 import org.apache.kafka.common.utils.Utils;
 import org.apache.kafka.connect.data.Date;
@@ -232,6 +234,7 @@ public class PostgreSqlDatabaseDialect extends GenericDatabaseDialect {
         case Time.LOGICAL_NAME:
           return "TIME";
         case Timestamp.LOGICAL_NAME:
+        case MicroTimestamp.SCHEMA_NAME:
           return "TIMESTAMP";
         default:
           // fall through to normal types
