@@ -15,7 +15,7 @@
 
 package io.confluent.connect.jdbc.dialect;
 
-import java.text.SimpleDateFormat;
+//import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.TimeZone;
