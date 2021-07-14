@@ -16,6 +16,7 @@
 package io.confluent.connect.jdbc.dialect;
 
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.TimeZone;
 import org.apache.kafka.common.config.AbstractConfig;
@@ -1712,11 +1713,10 @@ public class GenericDatabaseDialect implements DatabaseDialect {
           );
           return true;
         case MicroTimestamp.SCHEMA_NAME:
-          Long mts = (Long) value;
-          Long milliTimestamp = mts / 1000;
+          Instant timestamp = Instant.ofEpochSecond(0, 1000L * (Long) value);
           statement.setTimestamp(
                   index,
-                  new java.sql.Timestamp(milliTimestamp),
+                  java.sql.Timestamp.from(timestamp),
                   DateTimeUtils.getTimeZoneCalendar(timeZone)
           );
           return true;

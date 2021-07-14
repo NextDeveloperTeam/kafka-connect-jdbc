@@ -27,6 +27,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +38,7 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.CompletableFuture;
 
+import io.debezium.time.MicroTimestamp;
 import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.data.SchemaBuilder;
 import org.apache.kafka.connect.data.Struct;
@@ -69,6 +71,7 @@ public class JdbcSinkTaskTest extends EasyMockSupport {
       .field("float", Schema.OPTIONAL_FLOAT32_SCHEMA)
       .field("double", Schema.OPTIONAL_FLOAT64_SCHEMA)
       .field("modified", Timestamp.SCHEMA)
+      .field("created", MicroTimestamp.schema())
       .build();
   private static final SinkRecord RECORD = new SinkRecord(
       "stub",
@@ -116,7 +119,9 @@ public class JdbcSinkTaskTest extends EasyMockSupport {
         .put("float", (float) 2356.3)
         .put("double", -2436546.56457)
         .put("age", 21)
-        .put("modified", new Date(1474661402123L));
+        .put("modified", new Date(1474661402123L))
+        .put("created", 1603343185639612L);
+
 
     final String topic = "atopic";
 
@@ -148,6 +153,11 @@ public class JdbcSinkTaskTest extends EasyMockSupport {
                     DateTimeUtils.getTimeZoneCalendar(timeZone)
                 );
                 assertEquals(((java.util.Date) struct.get("modified")).getTime(), dbTimestamp.getTime());
+                java.sql.Timestamp created = rs.getTimestamp(
+                        "created",
+                        DateTimeUtils.getTimeZoneCalendar(timeZone)
+                );
+//                assertEquals(java.sql.Timestamp.from(Instant.ofEpochSecond(0, 1000 * (Long) struct.get("created"))), created);
               }
             }
         )
