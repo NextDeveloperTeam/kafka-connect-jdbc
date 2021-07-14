@@ -188,8 +188,9 @@ public class JdbcSinkTaskTest extends EasyMockSupport {
         "    float NUMERIC," +
         "    double NUMERIC," +
         "    bytes BLOB," +
-        "    modified DATETIME, "+
-        "PRIMARY KEY (firstName, lastName));"
+        "    modified DATETIME, " +
+        "    created DATETIME, " +
+                "PRIMARY KEY (firstName, lastName));"
     );
 
     task.start(props);
@@ -202,7 +203,9 @@ public class JdbcSinkTaskTest extends EasyMockSupport {
         .put("long", 8594L)
         .put("double", 3256677.56457d)
         .put("age", 28)
-        .put("modified", new Date(1474661402123L));
+        .put("modified", new Date(1474661402123L))
+        .put("created", 1603343185639612L);
+
 
     task.put(Collections.singleton(new SinkRecord(topic, 1, null, null, SCHEMA, struct, 43)));
 
