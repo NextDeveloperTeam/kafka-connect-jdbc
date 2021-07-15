@@ -1732,7 +1732,7 @@ public class GenericDatabaseDialect implements DatabaseDialect {
                   DateTimeUtils.getTimeZoneCalendar(timeZone)
           );
           return true;
-          default:
+        default:
           return false;
       }
     }
