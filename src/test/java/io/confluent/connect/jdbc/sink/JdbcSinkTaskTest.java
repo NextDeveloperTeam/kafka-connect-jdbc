@@ -28,6 +28,8 @@ import java.io.StringWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,6 +41,7 @@ import java.util.TimeZone;
 import java.util.concurrent.CompletableFuture;
 
 import io.debezium.time.MicroTimestamp;
+import io.debezium.time.ZonedTimestamp;
 import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.data.SchemaBuilder;
 import org.apache.kafka.connect.data.Struct;
@@ -72,7 +75,8 @@ public class JdbcSinkTaskTest extends EasyMockSupport {
       .field("double", Schema.OPTIONAL_FLOAT64_SCHEMA)
       .field("modified", Timestamp.SCHEMA)
       .field("created", MicroTimestamp.schema())
-      .build();
+      .field("updated", ZonedTimestamp.schema())
+          .build();
   private static final SinkRecord RECORD = new SinkRecord(
       "stub",
       0,
@@ -120,7 +124,9 @@ public class JdbcSinkTaskTest extends EasyMockSupport {
         .put("double", -2436546.56457)
         .put("age", 21)
         .put("modified", new Date(1474661402123L))
-        .put("created", 1603343185639612L);
+        .put("created", 1603343185639612L)
+        .put("updated", "2018-02-24T08:24:03Z");
+
 
 
     final String topic = "atopic";
@@ -158,6 +164,14 @@ public class JdbcSinkTaskTest extends EasyMockSupport {
                         DateTimeUtils.getTimeZoneCalendar(timeZone)
                 );
 //                assertEquals(java.sql.Timestamp.from(Instant.ofEpochSecond(0, 1000 * (Long) struct.get("created"))), created);
+                java.sql.Timestamp updated = rs.getTimestamp(
+                        "updated",
+                        DateTimeUtils.getTimeZoneCalendar(timeZone)
+                );
+
+               Instant ts = Instant.parse((String) struct.get("updated"));
+               java.sql.Timestamp.from(ts);
+               assertEquals(java.sql.Timestamp.from(ts), updated);
               }
             }
         )
@@ -190,6 +204,7 @@ public class JdbcSinkTaskTest extends EasyMockSupport {
         "    bytes BLOB," +
         "    modified DATETIME, " +
         "    created DATETIME, " +
+        "    updated DATETIME, " +
                 "PRIMARY KEY (firstName, lastName));"
     );
 
@@ -204,7 +219,8 @@ public class JdbcSinkTaskTest extends EasyMockSupport {
         .put("double", 3256677.56457d)
         .put("age", 28)
         .put("modified", new Date(1474661402123L))
-        .put("created", 1603343185639612L);
+        .put("created", 1603343185639612L)
+        .put("updated", "2018-02-24T08:24:03Z");
 
 
     task.put(Collections.singleton(new SinkRecord(topic, 1, null, null, SCHEMA, struct, 43)));

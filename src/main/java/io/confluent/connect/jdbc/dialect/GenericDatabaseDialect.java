@@ -15,13 +15,10 @@
 
 package io.confluent.connect.jdbc.dialect;
 
-//import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.TimeZone;
 
-import io.debezium.time.ZonedTimestamp;
 import org.apache.kafka.common.config.AbstractConfig;
 import org.apache.kafka.common.config.types.Password;
 import org.apache.kafka.connect.data.Date;
@@ -37,9 +34,9 @@ import org.slf4j.LoggerFactory;
 //import io.debezium.time.Date;
 //import io.debezium.time.MicroTime;
 import io.debezium.time.MicroTimestamp;
+import io.debezium.time.ZonedTimestamp;
 //import io.debezium.time.Time;
 //import io.debezium.time.Timestamp;
-//import io.debezium.time.ZonedTimestamp;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -1724,11 +1721,10 @@ public class GenericDatabaseDialect implements DatabaseDialect {
           );
           return true;
         case ZonedTimestamp.SCHEMA_NAME:
-          OffsetDateTime odt = OffsetDateTime.parse(value.toString());
-          Instant instant = odt.toInstant();
+          Instant ts = Instant.parse((String) value);
           statement.setTimestamp(
                   index,
-                  java.sql.Timestamp.from(instant),
+                  java.sql.Timestamp.from(ts),
                   DateTimeUtils.getTimeZoneCalendar(timeZone)
           );
           return true;
