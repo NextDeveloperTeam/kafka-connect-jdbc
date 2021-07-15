@@ -15,6 +15,7 @@
 
 package io.confluent.connect.jdbc.dialect;
 
+import io.debezium.time.MicroTimestamp;
 import org.apache.kafka.common.config.AbstractConfig;
 import org.apache.kafka.connect.data.Date;
 import org.apache.kafka.connect.data.Decimal;
@@ -100,6 +101,7 @@ public class MySqlDatabaseDialect extends GenericDatabaseDialect {
         case Time.LOGICAL_NAME:
           return "TIME(3)";
         case Timestamp.LOGICAL_NAME:
+        case MicroTimestamp.SCHEMA_NAME:
           return "DATETIME(3)";
         default:
           // pass through to primitive types
