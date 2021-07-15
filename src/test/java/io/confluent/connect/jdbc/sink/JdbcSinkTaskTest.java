@@ -202,9 +202,9 @@ public class JdbcSinkTaskTest extends EasyMockSupport {
         "    float NUMERIC," +
         "    double NUMERIC," +
         "    bytes BLOB," +
-        "    modified DATETIME, " +
-        "    created DATETIME, " +
-        "    updated DATETIME, " +
+        "    modified DATETIME," +
+        "    created DATETIME," +
+        "    updated DATETIME," +
                 "PRIMARY KEY (firstName, lastName));"
     );
 
