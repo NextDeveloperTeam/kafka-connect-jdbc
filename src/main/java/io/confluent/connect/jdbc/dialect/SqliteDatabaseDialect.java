@@ -15,6 +15,7 @@
 
 package io.confluent.connect.jdbc.dialect;
 
+import io.debezium.time.ZonedTimestamp;
 import org.apache.kafka.common.config.AbstractConfig;
 import org.apache.kafka.connect.data.Date;
 import org.apache.kafka.connect.data.Decimal;
@@ -75,6 +76,7 @@ public class SqliteDatabaseDialect extends GenericDatabaseDialect {
         case Date.LOGICAL_NAME:
         case Time.LOGICAL_NAME:
         case Timestamp.LOGICAL_NAME:
+        case ZonedTimestamp.SCHEMA_NAME:
           return "NUMERIC";
         default:
           // pass through to normal types

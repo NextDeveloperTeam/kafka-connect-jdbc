@@ -171,7 +171,6 @@ public class JdbcSinkTaskTest extends EasyMockSupport {
                         DateTimeUtils.getTimeZoneCalendar(timeZone)
                 );
                Instant ts = Instant.parse((String) struct.get("updated"));
-               java.sql.Timestamp.from(ts);
                assertEquals(java.sql.Timestamp.from(ts), updated);
               }
             }
