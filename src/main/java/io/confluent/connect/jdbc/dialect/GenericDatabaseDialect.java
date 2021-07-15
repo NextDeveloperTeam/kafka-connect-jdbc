@@ -17,8 +17,11 @@ package io.confluent.connect.jdbc.dialect;
 
 //import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.TimeZone;
+
+import io.debezium.time.ZonedTimestamp;
 import org.apache.kafka.common.config.AbstractConfig;
 import org.apache.kafka.common.config.types.Password;
 import org.apache.kafka.connect.data.Date;
@@ -1720,7 +1723,16 @@ public class GenericDatabaseDialect implements DatabaseDialect {
                   DateTimeUtils.getTimeZoneCalendar(timeZone)
           );
           return true;
-        default:
+        case ZonedTimestamp.SCHEMA_NAME:
+          OffsetDateTime odt = OffsetDateTime.parse(value.toString());
+          Instant instant = odt.toInstant();
+          statement.setTimestamp(
+                  index,
+                  java.sql.Timestamp.from(instant),
+                  DateTimeUtils.getTimeZoneCalendar(timeZone)
+          );
+          return true;
+          default:
           return false;
       }
     }
