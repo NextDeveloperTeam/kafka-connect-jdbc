@@ -101,7 +101,6 @@ public class MySqlDatabaseDialect extends GenericDatabaseDialect {
         case Time.LOGICAL_NAME:
           return "TIME(3)";
         case Timestamp.LOGICAL_NAME:
-        case ZonedTimestamp.SCHEMA_NAME:
           return "DATETIME(3)";
         default:
           // pass through to primitive types
