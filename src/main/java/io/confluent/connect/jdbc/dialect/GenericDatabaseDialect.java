@@ -1715,17 +1715,17 @@ public class GenericDatabaseDialect implements DatabaseDialect {
         case MicroTimestamp.SCHEMA_NAME:
           Instant timestamp = Instant.ofEpochSecond(0, 1000L * (Long) value);
           statement.setTimestamp(
-                  index,
-                  java.sql.Timestamp.from(timestamp),
-                  DateTimeUtils.getTimeZoneCalendar(timeZone)
+              index,
+              java.sql.Timestamp.from(timestamp),
+              DateTimeUtils.getTimeZoneCalendar(timeZone)
           );
           return true;
         case ZonedTimestamp.SCHEMA_NAME:
           Instant ts = Instant.parse((String) value);
           statement.setTimestamp(
-                  index,
-                  java.sql.Timestamp.from(ts),
-                  DateTimeUtils.getTimeZoneCalendar(timeZone)
+              index,
+              java.sql.Timestamp.from(ts),
+              DateTimeUtils.getTimeZoneCalendar(timeZone)
           );
           return true;
         default:
