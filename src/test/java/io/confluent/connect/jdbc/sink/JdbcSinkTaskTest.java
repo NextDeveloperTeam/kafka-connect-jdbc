@@ -164,6 +164,8 @@ public class JdbcSinkTaskTest extends EasyMockSupport {
                         "created",
                         DateTimeUtils.getTimeZoneCalendar(timeZone)
                 );
+
+                // it loses the nano precision because sqlite client does that
                 assertEquals((Long) struct.get("created") / 1000, created.getTime());
 
                 java.sql.Timestamp updated = rs.getTimestamp(
