@@ -18,6 +18,7 @@ package io.confluent.connect.jdbc.dialect;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.TimeZone;
+import java.util.UUID;
 
 import org.apache.kafka.common.config.AbstractConfig;
 import org.apache.kafka.common.config.types.Password;
@@ -31,8 +32,8 @@ import org.apache.kafka.connect.errors.ConnectException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//import io.debezium.time.Date;
 //import io.debezium.time.MicroTime;
+import io.debezium.data.Uuid;
 import io.debezium.time.MicroTimestamp;
 import io.debezium.time.ZonedTimestamp;
 //import io.debezium.time.Time;
@@ -1726,6 +1727,13 @@ public class GenericDatabaseDialect implements DatabaseDialect {
               index,
               java.sql.Timestamp.from(ts),
               DateTimeUtils.getTimeZoneCalendar(timeZone)
+          );
+          return true;
+        case Uuid.LOGICAL_NAME:
+          UUID uuid = UUID.fromString((String) value);
+          statement.setObject(
+                  index,
+                  uuid
           );
           return true;
         default:
