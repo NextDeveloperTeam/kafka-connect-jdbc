@@ -17,7 +17,7 @@ package io.confluent.connect.jdbc.dialect;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
-import java.util.TimeZone
+import java.util.TimeZone;
 import java.util.UUID;
 
 import org.apache.kafka.common.config.AbstractConfig;
