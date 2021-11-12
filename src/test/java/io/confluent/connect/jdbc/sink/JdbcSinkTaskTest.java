@@ -40,6 +40,7 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.CompletableFuture;
 
+import io.debezium.data.Uuid;
 import io.debezium.time.MicroTimestamp;
 import io.debezium.time.ZonedTimestamp;
 import org.apache.kafka.connect.data.Schema;
@@ -76,6 +77,7 @@ public class JdbcSinkTaskTest extends EasyMockSupport {
       .field("modified", Timestamp.SCHEMA)
       .field("created", MicroTimestamp.schema())
       .field("updated", ZonedTimestamp.schema())
+      .field("uuid", Uuid.schema())
           .build();
   private static final SinkRecord RECORD = new SinkRecord(
       "stub",
@@ -125,8 +127,8 @@ public class JdbcSinkTaskTest extends EasyMockSupport {
         .put("age", 21)
         .put("modified", new Date(1474661402123L))
         .put("created", 1603343185639612L)
-        .put("updated", "2018-02-24T08:24:03Z");
-
+        .put("updated", "2018-02-24T08:24:03Z")
+        .put("uuid", "a8adb3e3-2013-4008-9c74-4015f47bfbf6");
 
 
     final String topic = "atopic";
@@ -174,6 +176,8 @@ public class JdbcSinkTaskTest extends EasyMockSupport {
                 );
                Instant ts = Instant.parse((String) struct.get("updated"));
                assertEquals(java.sql.Timestamp.from(ts), updated);
+
+               assertEquals(struct.get("uuid"), rs.getObject("uuid"));
               }
             }
         )
@@ -207,6 +211,7 @@ public class JdbcSinkTaskTest extends EasyMockSupport {
         "    modified DATETIME," +
         "    created DATETIME," +
         "    updated DATETIME," +
+        "    uuid UUID," +
                 "PRIMARY KEY (firstName, lastName));"
     );
 
@@ -222,7 +227,9 @@ public class JdbcSinkTaskTest extends EasyMockSupport {
         .put("age", 28)
         .put("modified", new Date(1474661402123L))
         .put("created", 1603343185639612L)
-        .put("updated", "2018-02-24T08:24:03Z");
+        .put("updated", "2018-02-24T08:24:03Z")
+        .put("uuid", "a8adb3e3-2013-4008-9c74-4015f47bfbf6")
+            ;
 
 
     task.put(Collections.singleton(new SinkRecord(topic, 1, null, null, SCHEMA, struct, 43)));
