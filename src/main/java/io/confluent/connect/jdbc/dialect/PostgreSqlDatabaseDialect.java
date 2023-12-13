@@ -15,6 +15,8 @@
 
 package io.confluent.connect.jdbc.dialect;
 
+import io.debezium.time.MicroTimestamp;
+import io.debezium.time.ZonedTimestamp;
 import io.confluent.connect.jdbc.dialect.DatabaseDialectProvider.SubprotocolBasedProvider;
 import io.confluent.connect.jdbc.sink.metadata.SinkRecordField;
 import io.confluent.connect.jdbc.source.ColumnMapping;
@@ -306,6 +308,8 @@ public class PostgreSqlDatabaseDialect extends GenericDatabaseDialect {
         case Time.LOGICAL_NAME:
           return "TIME";
         case Timestamp.LOGICAL_NAME:
+        case MicroTimestamp.SCHEMA_NAME:
+        case ZonedTimestamp.SCHEMA_NAME:
           return "TIMESTAMP";
         default:
           // fall through to normal types
